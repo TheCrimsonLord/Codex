@@ -1,7 +1,8 @@
+import json
 import os
+
 import discord
 import dotenv
-import json
 from discord.ext import commands
 
 
