@@ -1,0 +1,4 @@
+.env
+prefixes.json
+.idea/
+__pycache__
