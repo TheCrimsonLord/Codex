@@ -17,7 +17,7 @@ class Admin(commands.Cog):
     async def clear(self, ctx, amount: int = 5):
         stop_at = dt.datetime.now() - dt.timedelta(days=14)
         messages_list = []
-        async for message in ctx.channel.history(limit=amount):
+        async for message in ctx.channel.history(limit=amount+1):
             if message.created_at < stop_at:
                 break
             messages_list.append(message)
