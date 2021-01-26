@@ -1,8 +1,7 @@
 import random
 
+import discord
 from discord.ext import commands
-
-from main import bot
 
 
 class Fun(commands.Cog):
@@ -12,9 +11,9 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send(f"Pong! {round(bot.latency * 1000)}ms")
+        await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")
 
-    @commands.command(aliases=["8ball"])
+    @commands.command(name="8ball")
     async def _8ball(self, ctx, *, question):
         responses = ["It is certain",
                      "It is decidedly so.",
@@ -36,7 +35,8 @@ class Fun(commands.Cog):
                      "My sources say no.",
                      "Outlook not so good.",
                      "Very doubtful."]
-        await ctx.send(f"{random.choice(responses)}")
+        await ctx.send(f"{question}? {random.choice(responses)}",
+                       allowed_mentions=discord.AllowedMentions.none())
 
 
 def setup(bot):

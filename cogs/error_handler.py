@@ -3,7 +3,6 @@ import traceback
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import MissingPermissions
 
 
 class CommandErrorHandler(commands.Cog):
@@ -26,8 +25,8 @@ class CommandErrorHandler(commands.Cog):
         if hasattr(ctx.command, "on_error"):
             return
 
-        if isinstance(error, MissingPermissions):
-            await ctx.send(f"Sorry {ctx.message.author}, you do not have permissions to do that!")
+        if isinstance(error, (commands.MissingPermissions, commands.BotMissingPermissions)):
+            return await ctx.send(str(error))
 
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("Invalid command used.")
