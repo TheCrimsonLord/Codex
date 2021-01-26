@@ -64,22 +64,12 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Activity(type=discord.ActivityType.watching, name="The World End"))
     print(f"Bot online as {bot.user}.")
+    print(discord.version_info)
 
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
-
-
-@bot.command()
-async def load(extension):
-    bot.load_extension(f"cogs.{extension}")
-
-
-@bot.command()
-async def unload(extension):
-    bot.unload_extension(f"cogs.{extension}")
-
 
 dotenv.load_dotenv()
 bot.run(os.getenv("TOKEN"))

@@ -1,4 +1,5 @@
 import typing
+import datetime as dt
 
 import discord
 from discord.ext import commands
@@ -9,12 +10,21 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["purge"])
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def clear(self, ctx, amount=5):
-        await ctx.channel.purge(limit=amount + 1)
+    async def clear(self, ctx, amount: int = 5):
+        stop_at = dt.datetime.now() - dt.timedelta(days=14)
+        messages_list = []
+        async for message in ctx.channel.history(limit=amount):
+            if message.created_at < stop_at:
+                break
+            messages_list.append(message)
+            if len(messages_list) > 90:
+                await ctx.channel.delete_messages(messages_list)
+                messages_list = []
+        await ctx.channel.delete_messages(messages_list)
 
     @commands.command()
     @commands.guild_only()
