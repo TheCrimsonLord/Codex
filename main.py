@@ -17,7 +17,7 @@ class HelpMePlease(commands.MinimalHelpCommand):
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
-            embed = discord.Embed(description=page, color=0xFF00FF)
+            embed = discord.Embed(description=page, color=0xffae00)
             await destination.send(embed=embed)
 
 

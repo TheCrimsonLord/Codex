@@ -31,6 +31,9 @@ class CommandErrorHandler(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             await ctx.send("Invalid command used.")
 
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("Missing Requirments.")
+
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
         if cog:
