@@ -23,14 +23,14 @@ class CommandErrorHandler(commands.Cog):
         """
 
         # This prevents any commands with local handlers being handled here in on_command_error.
-        if hasattr(ctx.command, 'on_error'):
+        if hasattr(ctx.command, "on_error"):
             return
 
         if isinstance(error, MissingPermissions):
             await ctx.send(f"Sorry {ctx.message.author}, you do not have permissions to do that!")
 
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send('Invalid command used.')
+            await ctx.send("Invalid command used.")
 
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
@@ -42,34 +42,34 @@ class CommandErrorHandler(commands.Cog):
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
         # If nothing is found. We keep the exception passed to on_command_error.
-        error = getattr(error, 'original', error)
+        error = getattr(error, "original", error)
 
         # Anything in ignored will return and prevent anything happening.
         if isinstance(error, ignored):
             return
 
         if isinstance(error, commands.DisabledCommand):
-            await ctx.send(f'{ctx.command} has been disabled.')
+            await ctx.send(f"{ctx.command} has been disabled.")
 
         elif isinstance(error, commands.NoPrivateMessage):
             try:
-                await ctx.author.send(f'{ctx.command} can not be used in Private Messages.')
+                await ctx.author.send(f"{ctx.command} can not be used in Private Messages.")
             except discord.HTTPException:
                 pass
 
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
-                await ctx.send('I could not find that member. Please try again.')
+            if ctx.command.qualified_name == "tag list":  # Check if the command being invoked is "tag list"
+                await ctx.send("I could not find that member. Please try again.")
 
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
-            print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+            print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
             traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     """Below is an example of a Local Error Handler for our command do_repeat"""
 
-    @commands.command(name='repeat', aliases=['mimic', 'copy'])
+    @commands.command(name="repeat", aliases=["mimic", "copy"])
     async def do_repeat(self, ctx, *, inp: str):
         """A simple command which repeats your input!
         Parameters
@@ -90,7 +90,7 @@ class CommandErrorHandler(commands.Cog):
 
         # Check if our required argument inp is missing.
         if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'inp':
+            if error.param.name == "inp":
                 await ctx.send("You forgot to give me input to repeat!")
 
 

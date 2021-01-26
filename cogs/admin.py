@@ -20,14 +20,14 @@ class Admin(commands.Cog):
     @commands.bot_has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await member.kick(reason=f"{ctx.author} | {reason}")
-        await ctx.send(f'Banned {member} for {reason}')
+        await ctx.send(f"Banned {member} for {reason}")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         await member.ban(reason=f"{ctx.author} | {reason}")
-        await ctx.send(f'Banned {member} for {reason}')
+        await ctx.send(f"Banned {member} for {reason}")
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
