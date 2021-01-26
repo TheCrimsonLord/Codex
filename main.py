@@ -62,7 +62,7 @@ async def changeprefix(ctx, prefix):
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online,
-                              activity=discord.Activity(type=discord.ActivityType.watching, name="The World End"))
+                              activity=discord.Activity(type=discord.ActivityType.watching, name="The World Burn"))
     print(f"Bot online as {bot.user}.")
     print(discord.version_info)
 
