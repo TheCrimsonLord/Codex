@@ -10,7 +10,7 @@ def get_prefix(bot, message):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
 
-    return prefixes.get(str(message.guild.id), ".")
+    return commands.when_mentioned_or(prefixes.get(str(message.guild.id), "."))(bot, message)
 
 
 class HelpMePlease(commands.MinimalHelpCommand):
@@ -65,6 +65,7 @@ async def on_ready():
                               activity=discord.Activity(type=discord.ActivityType.watching, name="The World Burn"))
     print(f"Bot online as {bot.user}.")
     print(discord.version_info)
+    print("I'm in " + str(len(bot.guilds)) + " servers")
 
 
 for filename in os.listdir("./cogs"):
