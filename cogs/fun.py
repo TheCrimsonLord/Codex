@@ -2,6 +2,7 @@ import random
 
 import aiohttp
 import discord
+from discord import message
 from discord.ext import commands
 
 
@@ -48,6 +49,12 @@ class Fun(commands.Cog):
                 res = await r.json()
                 embed.set_image(url=res['data']['children'][random.randint(0, 25)]['data']['url'])
                 await ctx.send(embed=embed, content=None)
+
+    @commands.command()
+    async def clone(self, ctx, user: discord.User):
+        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", description=None)
+        embed.set_image(url=user.avatar_url)
+        await ctx.send(embed=embed, content=None)
 
 
 def setup(bot):

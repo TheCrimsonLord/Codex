@@ -25,6 +25,9 @@ class CommandErrorHandler(commands.Cog):
         if hasattr(ctx.command, "on_error"):
             return
 
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f'You passed in a bad argument\n{error}')
+
         if isinstance(error, (commands.MissingPermissions, commands.BotMissingPermissions)):
             return await ctx.send(str(error))
 
@@ -37,7 +40,7 @@ class CommandErrorHandler(commands.Cog):
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
         if cog:
-            if cog.get_overridden_method(cog.cog_command_error) is not None:
+            if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
         ignored = (commands.CommandNotFound,)
@@ -59,10 +62,10 @@ class CommandErrorHandler(commands.Cog):
             except discord.HTTPException:
                 pass
 
+
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == "tag list":  # Check if the command being invoked is "tag list"
-                await ctx.send("I could not find that member. Please try again.")
+            await ctx.send("I could not find that member. Please try again.")
 
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
