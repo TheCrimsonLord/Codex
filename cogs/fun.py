@@ -2,7 +2,6 @@ import random
 
 import aiohttp
 import discord
-from discord import message
 from discord.ext import commands
 
 
@@ -40,15 +39,16 @@ class Fun(commands.Cog):
         await ctx.send(f"{question}? {random.choice(responses)}",
                        allowed_mentions=discord.AllowedMentions.none())
 
-    @commands.command(aliases=['memes'])
+    @commands.command(aliases=["memes"])
     async def meme(self, ctx):
-        embed = discord.Embed(title="Meme", description=None)
-
         async with aiohttp.ClientSession() as cs:
-            async with cs.get('https://www.reddit.com/r/memes/new.json?sort=hot') as r:
+            async with cs.get("https://www.reddit.com/r/memes/new.json?sort=hot") as r:
                 res = await r.json()
-                embed.set_image(url=res['data']['children'][random.randint(0, 25)]['data']['url'])
-                await ctx.send(embed=embed, content=None)
+        data2 = res["data"]["children"][random.randint(0, 24)]["data"]
+        reddit_title = data2["title"]
+        embed = discord.Embed(title=reddit_title, description=None)
+        embed.set_image(url=data2["url"])
+        await ctx.send(embed=embed, content=None)
 
     @commands.command()
     async def clone(self, ctx, user: discord.User):
