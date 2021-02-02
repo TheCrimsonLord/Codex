@@ -13,16 +13,8 @@ def get_prefix(bot, message):
     return commands.when_mentioned_or(prefixes.get(str(message.guild.id), "."))(bot, message)
 
 
-class HelpMePlease(commands.MinimalHelpCommand):
-    async def send_pages(self):
-        destination = self.get_destination()
-        for page in self.paginator.pages:
-            embed = discord.Embed(description=page, color=0xffae00)
-            await destination.send(embed=embed)
-
-
-bot = commands.Bot(command_prefix=get_prefix, help_command=HelpMePlease())
-
+bot = commands.Bot(command_prefix=get_prefix)
+bot.remove_command("help")
 
 @bot.event
 async def on_guild_join(guild):

@@ -56,6 +56,10 @@ class Fun(commands.Cog):
         embed.set_image(url=user.avatar_url)
         await ctx.send(embed=embed, content=None)
 
+    @commands.command()
+    async def sum(self, ctx, numone: int, numtwo: int):
+        await ctx.send(numone + numtwo)
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))
