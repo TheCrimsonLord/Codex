@@ -6,7 +6,7 @@ import dotenv
 from discord.ext import commands
 
 
-def get_prefix(bot, message):
+def get_prefix(bot, message):  # noqa
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
 
@@ -15,6 +15,7 @@ def get_prefix(bot, message):
 
 bot = commands.Bot(command_prefix=get_prefix)
 bot.remove_command("help")
+
 
 @bot.event
 async def on_guild_join(guild):
@@ -38,7 +39,7 @@ async def on_guild_remove(guild):
         json.dump(prefixes, f, indent=4)
 
 
-@bot.command()
+@bot.command(brief="Changes the command prefix")
 async def changeprefix(ctx, prefix):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)

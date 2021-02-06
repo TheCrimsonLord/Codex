@@ -40,7 +40,7 @@ class CommandErrorHandler(commands.Cog):
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
         if cog:
-            if cog._get_overridden_method(cog.cog_command_error) is not None:
+            if cog._get_overridden_method(cog.cog_command_error) is not None:  # noqa
                 return
 
         ignored = (commands.CommandNotFound,)
@@ -61,7 +61,6 @@ class CommandErrorHandler(commands.Cog):
                 await ctx.author.send(f"{ctx.command} can not be used in Private Messages.")
             except discord.HTTPException:
                 pass
-
 
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):

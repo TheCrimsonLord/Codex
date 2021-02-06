@@ -14,7 +14,7 @@ class Fun(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")
 
-    @commands.command(name="8ball")
+    @commands.command(name="8ball", brief="Ask and you shall receive ")
     async def _8ball(self, ctx, *, question):
         responses = ["It is certain",
                      "It is decidedly so.",
@@ -46,19 +46,16 @@ class Fun(commands.Cog):
                 res = await r.json()
         data2 = res["data"]["children"][random.randint(0, 24)]["data"]
         reddit_title = data2["title"]
-        embed = discord.Embed(title=reddit_title, description=None)
+        embed = discord.Embed(title=reddit_title, description=None, color=discord.Color.random())
         embed.set_image(url=data2["url"])
         await ctx.send(embed=embed, content=None)
 
     @commands.command()
     async def clone(self, ctx, user: discord.User):
-        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", description=None)
+        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", description=None,
+                              color=discord.Color.random())
         embed.set_image(url=user.avatar_url)
         await ctx.send(embed=embed, content=None)
-
-    @commands.command()
-    async def sum(self, ctx, numone: int, numtwo: int):
-        await ctx.send(numone + numtwo)
 
 
 def setup(bot):

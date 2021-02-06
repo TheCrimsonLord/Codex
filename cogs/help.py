@@ -7,7 +7,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(brief="Shows help for a command")
     async def help(self, ctx):
         embed = discord.Embed(title="Help", description=None, color=discord.Color.orange())
         embed.add_field(name="Fun", value="8ball, Ping, Meme, Clone, Sum", inline=False)

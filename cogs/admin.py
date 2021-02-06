@@ -10,7 +10,7 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["purge"])
+    @commands.command(brief="Clears messages", aliases=["purge"])
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
@@ -26,7 +26,7 @@ class Admin(commands.Cog):
                 messages_list = []
         await ctx.channel.delete_messages(messages_list)
 
-    @commands.command()
+    @commands.command(brief="Kicks member")
     @commands.guild_only()
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
@@ -34,7 +34,7 @@ class Admin(commands.Cog):
         await member.kick(reason=f"{ctx.author} | {reason}")
         await ctx.send(f"Banned {member} for {reason}")
 
-    @commands.command()
+    @commands.command(brief="Bans members")
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -42,7 +42,7 @@ class Admin(commands.Cog):
         await member.ban(reason=f"{ctx.author} | {reason}")
         await ctx.send(f"Banned {member} for {reason}")
 
-    @commands.command()
+    @commands.command(brief="Unbans members")
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
