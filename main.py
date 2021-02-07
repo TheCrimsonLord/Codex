@@ -47,9 +47,9 @@ async def changeprefix(ctx, prefix):
     with open("prefixes.json", "w") as f:
         json.dump(prefixes, f, indent=4)
     embed = discord.Embed(title="Prefix has successfully been changed", description=f"You can now use {prefix} to "
-                                                                                   f"activate commands",
+                                                                                    f"activate commands",
                           color=discord.Color.random())
-    await ctx.send(embed=embed, content=None)
+    await ctx.send(embed=embed)
 
 
 @bot.event

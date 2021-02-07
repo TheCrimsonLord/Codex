@@ -12,9 +12,8 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        embed = discord.Embed(title=f"Pong {round(self.bot.latency * 1000)}ms", description=None,
-                              color=discord.Color.random())
-        await ctx.send(embed=embed, content=None)
+        embed = discord.Embed(title=f"Pong {round(self.bot.latency * 1000)}ms", color=discord.Color.random())
+        await ctx.send(embed=embed)
 
     @commands.command(name="8ball", brief="Ask and you shall receive ")
     async def _8ball(self, ctx, *, question):
@@ -40,8 +39,7 @@ class Fun(commands.Cog):
                      "Outlook not so good.",
                      "Very doubtful."]
         embed = discord.Embed(title=question, description=random.choice(responses), color=discord.Color.random())
-        await ctx.send(embed=embed, content=None,
-                       allowed_mentions=discord.AllowedMentions.none())
+        await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 
     @commands.command(aliases=["memes"])
     async def meme(self, ctx):
@@ -50,25 +48,23 @@ class Fun(commands.Cog):
                 res = await r.json()
         data2 = res["data"]["children"][random.randint(0, 24)]["data"]
         reddit_title = data2["title"]
-        embed = discord.Embed(title=reddit_title, description=None, color=discord.Color.random())
+        embed = discord.Embed(title=reddit_title, color=discord.Color.random())
         embed.set_image(url=data2["url"])
-        await ctx.send(embed=embed, content=None)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def clone(self, ctx, user: discord.User):
-        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", description=None,
-                              color=discord.Color.random())
+        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", color=discord.Color.random())
         embed.set_image(url=user.avatar_url)
-        await ctx.send(embed=embed, content=None)
+        await ctx.send(embed=embed)
 
     @commands.command(breif="Sends a random death message", aliases=["murder"])
     async def kill(self, ctx, user: discord.User):
         outcome = ["was shot.",
                    "was stabbed in the chest.",
                    "dodged the attack."]
-        embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", description=None,
-                              color=discord.Color.random())
-        await ctx.send(embed=embed, content=None)
+        embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
