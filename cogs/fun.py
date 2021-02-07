@@ -48,7 +48,8 @@ class Fun(commands.Cog):
                 res = await r.json()
         data2 = res["data"]["children"][random.randint(0, 24)]["data"]
         reddit_title = data2["title"]
-        embed = discord.Embed(title=reddit_title, color=discord.Color.random())
+        reddit_link = data2["permalink"]
+        embed = discord.Embed(title=reddit_title, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
         embed.set_image(url=data2["url"])
         await ctx.send(embed=embed)
 

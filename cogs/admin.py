@@ -1,4 +1,6 @@
+
 import datetime as dt
+import json
 import typing
 
 import discord
@@ -55,8 +57,43 @@ class Admin(commands.Cog):
             if (isinstance(member, int) and ban_entry.user.id == member) or \
                     (isinstance(member, str) and member in str(ban_entry.user)):
                 await ctx.guild.unban(ban_entry.user, reason=str(ctx.author))
-                embed = discord.Embed(title=f"{ctx.author} unbanned {ban_entry.user}",color=discord.Color.random())
+                embed = discord.Embed(title=f"{ctx.author} unbanned {ban_entry.user}", color=discord.Color.random())
+
                 return await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    async def setrules(self, ctx, *, inp: str):
+        amount: int = 1
+        embed = discord.Embed(title="Rules", description=inp, color=discord.Color.random())
+        stop_at = dt.datetime.now() - dt.timedelta(days=14)
+        messages_list = []
+        async for message in ctx.channel.history(limit=amount):
+            if message.created_at < stop_at:
+                break
+            messages_list.append(message)
+            if len(messages_list) > 90:
+                await ctx.channel.delete_messages(messages_list)
+                messages_list = []
+        await ctx.channel.delete_messages(messages_list)
+        await ctx.send(embed=embed)
+
+    @commands.command(brief="Changes the command prefix", aliases=["cp"])
+    @commands.guild_only()
+    @commands.has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    async def changeprefix(self, ctx, prefix):
+        with open("prefixes.json", "r") as f:
+            prefixes = json.load(f)
+        prefixes[str(ctx.guild.id)] = prefix
+        with open("prefixes.json", "w") as f:
+            json.dump(prefixes, f, indent=4)
+        embed = discord.Embed(title="Prefix has successfully been changed", description=f"You can now use {prefix} to "
+                                                                                        f"activate commands",
+                              color=discord.Color.random())
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
