@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+from main import bot
+
 
 class Help(commands.Cog):
 
@@ -10,8 +12,9 @@ class Help(commands.Cog):
     @commands.command(brief="Shows help for a command", aliases=["h"])
     async def help(self, ctx):
         embed = discord.Embed(title="Help", color=discord.Color.orange())
-        embed.add_field(name="Fun", value="8ball, Ping, Meme, Clone, Sum", inline=False)
-        embed.add_field(name="Admin", value="Clear, Kick, Ban, Unban", inline=False)
+        embed.add_field(name="Fun", value="8Ball, Ping, Meme, Clone, Kill")
+        embed.add_field(name="Admin", value="Kick, Ban, Unban, Clear, Set Rules, Perms, Set Prefix")
+        embed.set_thumbnail(url=bot.user.avatar_url)
         await ctx.send(embed=embed)
 
 

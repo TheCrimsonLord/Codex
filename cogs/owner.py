@@ -1,4 +1,6 @@
 import asyncio
+import sys
+
 import discord
 from discord.ext import commands
 
@@ -25,10 +27,12 @@ class Owner(commands.Cog):
     @commands.is_owner()
     @commands.command(brief="Sends info about bot")
     async def botinfo(self, ctx):
+        pyver = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         embed = discord.Embed(title="Bot Information", color=discord.Color.random())
         embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000)}ms", inline=False)
         embed.add_field(name="Servers", value="I'm in " + str(len(bot.guilds)) + " servers", inline=False)
         embed.add_field(name="Discord Version", value=discord.__version__, inline=False)
+        embed.add_field(name="Python Version", value=pyver, inline=False)
         await ctx.send(embed=embed)
 
 

@@ -1,6 +1,6 @@
 import json
 import os
-
+import sys
 import discord
 import dotenv
 from discord.ext import commands
@@ -13,7 +13,7 @@ def get_prefix(bot, message):  # noqa
 
 
 bot = commands.Bot(command_prefix=get_prefix)
-bot.remove_command("help")
+bot.help_command = None
 
 
 @bot.event
@@ -39,8 +39,9 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Activity(type=discord.ActivityType.watching, name="The World Burn"))
     print(f"Bot online as {bot.user}.")
-    print(discord.version_info)
+    print(f"Discord {discord.version_info}")
     print("I'm in " + str(len(bot.guilds)) + " servers")
+    print(f"Python {sys.version_info}")
 
 
 for filename in os.listdir("./cogs"):
