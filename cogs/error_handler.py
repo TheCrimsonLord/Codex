@@ -26,16 +26,20 @@ class CommandErrorHandler(commands.Cog):
             return
 
         if isinstance(error, commands.BadArgument):
-            await ctx.send(f'You passed in a bad argument\n{error}')
+            embed = discord.Embed(title=f"You passed in a bad argument\n{error}", description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         if isinstance(error, (commands.MissingPermissions, commands.BotMissingPermissions)):
-            return await ctx.send(str(error))
+            embed = discord.Embed(title=str(error), description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send("Invalid command used.")
+            embed = discord.Embed(title="Invalid command used.", description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Missing Requirements.")
+            embed = discord.Embed(title="Missing Requirements.", description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         # This prevents any cogs with an overwritten cog_command_error being handled here.
         cog = ctx.cog
@@ -54,17 +58,20 @@ class CommandErrorHandler(commands.Cog):
             return
 
         if isinstance(error, commands.DisabledCommand):
-            await ctx.send(f"{ctx.command} has been disabled.")
+            embed = discord.Embed(title=f"{ctx.command} has been disabled.", description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         elif isinstance(error, commands.NoPrivateMessage):
+            embed = discord.Embed(title=f"{ctx.command} can not be used in Private Messages.", description=None, color=discord.Color.random())
             try:
-                await ctx.author.send(f"{ctx.command} can not be used in Private Messages.")
+                await ctx.send(embed=embed, content=None)
             except discord.HTTPException:
                 pass
 
         # For this error example we check to see where it came from...
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("I could not find that member. Please try again.")
+            embed = discord.Embed(title="I could not find that member. Please try again.", description=None, color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
@@ -75,15 +82,8 @@ class CommandErrorHandler(commands.Cog):
 
     @commands.command(name="repeat", aliases=["mimic", "copy"])
     async def do_repeat(self, ctx, *, inp: str):
-        """A simple command which repeats your input!
-        Parameters
-        ------------
-        inp: str
-            The input you wish to repeat.
-            :param inp:
-            :param ctx:
-        """
-        await ctx.send(inp)
+        embed = discord.Embed(title=inp, description=None, color=discord.Color.random())
+        await ctx.send(embed=embed, content=None)
 
     @do_repeat.error
     async def do_repeat_handler(self, ctx, error):
@@ -95,7 +95,9 @@ class CommandErrorHandler(commands.Cog):
         # Check if our required argument inp is missing.
         if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == "inp":
-                await ctx.send("You forgot to give me input to repeat!")
+                embed = discord.Embed(title="You forgot to give me input to repeat!", description=None,
+                                      color=discord.Color.random())
+            await ctx.send(embed=embed, content=None)
 
 
 def setup(bot):

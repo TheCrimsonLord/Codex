@@ -39,17 +39,17 @@ async def on_guild_remove(guild):
         json.dump(prefixes, f, indent=4)
 
 
-@bot.command(brief="Changes the command prefix")
+@bot.command(brief="Changes the command prefix", aliases=["cp"])
 async def changeprefix(ctx, prefix):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
-
     prefixes[str(ctx.guild.id)] = prefix
-
     with open("prefixes.json", "w") as f:
         json.dump(prefixes, f, indent=4)
-
-    await ctx.send(f"Prefix changed to: {prefix}")
+    embed = discord.Embed(title="Prefix has successfully been changed", description=f"You can now use {prefix} to "
+                                                                                   f"activate commands",
+                          color=discord.Color.random())
+    await ctx.send(embed=embed, content=None)
 
 
 @bot.event

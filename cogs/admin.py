@@ -25,22 +25,27 @@ class Admin(commands.Cog):
                 await ctx.channel.delete_messages(messages_list)
                 messages_list = []
         await ctx.channel.delete_messages(messages_list)
+        await ctx.send(f"Deleted {amount} messages")
 
     @commands.command(brief="Kicks member")
     @commands.guild_only()
     @commands.has_permissions(kick_members=True)
     @commands.bot_has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
+        embed = discord.Embed(title=f"{ctx.author} kicked {member} for {reason}", description=None,
+                              color=discord.Color.random())
         await member.kick(reason=f"{ctx.author} | {reason}")
-        await ctx.send(f"Banned {member} for {reason}")
+        await ctx.send(embed=embed, content=None)
 
     @commands.command(brief="Bans members")
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
+        embed = discord.Embed(title=f"{ctx.author} banned {member} for {reason}", description=None,
+                              color=discord.Color.random())
         await member.ban(reason=f"{ctx.author} | {reason}")
-        await ctx.send(f"Banned {member} for {reason}")
+        await ctx.send(embed=embed, content=None)
 
     @commands.command(brief="Unbans members")
     @commands.guild_only()
@@ -53,7 +58,9 @@ class Admin(commands.Cog):
             if (isinstance(member, int) and ban_entry.user.id == member) or \
                     (isinstance(member, str) and member in str(ban_entry.user)):
                 await ctx.guild.unban(ban_entry.user, reason=str(ctx.author))
-                return await ctx.send(f"Unbanned {ban_entry.user}")
+                embed = discord.Embed(title=f"{ctx.author} unbanned {ban_entry.user}", description=None,
+                                      color=discord.Color.random())
+                return await ctx.send(embed=embed, content=None)
 
 
 def setup(bot):

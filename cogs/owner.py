@@ -12,9 +12,11 @@ class Owner(commands.Cog):
         self.bot = bot
 
     @commands.is_owner()
-    @commands.command(brief="Log out")
+    @commands.command(brief="Logs out the bot", aliases=["forcequit", "forcestop"])
     async def die(self, ctx):
-        await ctx.send("Bye :(")
+        embed = discord.Embed(title="Codex has been forcefully stopped by TheCrimsonLord",
+                              description=None, color=discord.Color.random())
+        await ctx.send(embed=embed, content=None)
         await asyncio.sleep(5)
         await self.bot.logout()
 
