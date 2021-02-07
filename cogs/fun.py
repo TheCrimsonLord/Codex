@@ -46,11 +46,12 @@ class Fun(commands.Cog):
         async with aiohttp.ClientSession() as cs:
             async with cs.get("https://www.reddit.com/r/memes/hot.json?sort=hot") as r:
                 res = await r.json()
-        data2 = res["data"]["children"][random.randint(0, 24)]["data"]
+        data2 = res["data"]["children"][random.randint(0, 25)]["data"]
         reddit_title = data2["title"]
         reddit_link = data2["permalink"]
         embed = discord.Embed(title=reddit_title, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
         embed.set_image(url=data2["url"])
+        embed.set_footer(text=f"👍{data2['ups']} | 💬{data2['num_comments']}")
         await ctx.send(embed=embed)
 
     @commands.command()
