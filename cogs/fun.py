@@ -44,7 +44,7 @@ class Fun(commands.Cog):
     @commands.command(aliases=["memes"])
     async def meme(self, ctx):
         async with aiohttp.ClientSession() as cs:
-            async with cs.get("https://www.reddit.com/r/memes/new.json?sort=hot") as r:
+            async with cs.get("https://www.reddit.com/r/memes/hot.json?sort=hot") as r:
                 res = await r.json()
         data2 = res["data"]["children"][random.randint(0, 24)]["data"]
         reddit_title = data2["title"]
