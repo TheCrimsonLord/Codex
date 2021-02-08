@@ -35,7 +35,7 @@ class Admin(commands.Cog):
         await member.kick(reason=f"{ctx.author} | {reason}")
         await ctx.send(embed=embed)
 
-    @commands.command(brief="Bans members")
+    @commands.command(brief="Bans members", aliases=["permkick"])
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
