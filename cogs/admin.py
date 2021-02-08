@@ -1,8 +1,6 @@
-
 import datetime as dt
 import json
 import typing
-
 import discord
 from discord.ext import commands
 
@@ -52,13 +50,11 @@ class Admin(commands.Cog):
     @commands.bot_has_permissions(ban_members=True)
     async def unban(self, ctx, *, member: typing.Union[int, str]):
         banned_users = await ctx.guild.bans()
-
         for ban_entry in banned_users:
             if (isinstance(member, int) and ban_entry.user.id == member) or \
                     (isinstance(member, str) and member in str(ban_entry.user)):
                 await ctx.guild.unban(ban_entry.user, reason=str(ctx.author))
                 embed = discord.Embed(title=f"{ctx.author} unbanned {ban_entry.user}", color=discord.Color.random())
-
                 return await ctx.send(embed=embed)
 
     @commands.command()
@@ -93,6 +89,17 @@ class Admin(commands.Cog):
         embed = discord.Embed(title="Prefix has successfully been changed", description=f"You can now use {prefix} to "
                                                                                         f"activate commands",
                               color=discord.Color.random())
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['perms_for', 'permissions'])
+    @commands.guild_only()
+    async def perms(self, ctx, *, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+        perms = '\n'.join(perm for perm, value in member.guild_permissions if value)
+        embed = discord.Embed(title='Permissions for:', description=ctx.guild.name, colour=member.colour)
+        embed.set_author(icon_url=member.avatar_url, name=str(member.display_name))
+        embed.add_field(name='\uFEFF', value=perms)
         await ctx.send(embed=embed)
 
 
