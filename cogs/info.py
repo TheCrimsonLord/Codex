@@ -48,14 +48,13 @@ class Info(commands.Cog):
 
     @commands.command(aliases=["guildinfo"])
     async def serverinfo(self, ctx):
-        embed = discord.Embed(title="Server information", color=discord.Color.random())
+        embed = discord.Embed(title=f"Server information for {ctx.guild.name}", color=discord.Color.random())
         embed.set_thumbnail(url=ctx.guild.icon_url)
         fields = [("ID", ctx.guild.id, True),
                   ("Owner", ctx.guild.owner, True),
                   ("Region", ctx.guild.region, True),
                   ("Created at", ctx.guild.created_at.strftime("%c"), True),
-                  ("Members", len(ctx.guild.members), True),
-                  ("Banned members", len(await ctx.guild.bans()), True),
+                  ("Members", (ctx.guild.member_count), True),
                   ("Text channels", len(ctx.guild.text_channels), True),
                   ("Voice channels", len(ctx.guild.voice_channels), True),
                   ("Categories", len(ctx.guild.categories), True),

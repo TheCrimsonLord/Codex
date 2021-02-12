@@ -8,7 +8,7 @@ from main import bot
 
 class Owner(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot : commands.Bot):
         self.bot = bot
 
     @commands.is_owner()
@@ -23,6 +23,38 @@ class Owner(commands.Cog):
         await asyncio.sleep(1)
         await self.bot.logout()
 
+    @commands.is_owner()
+    @commands.command()
+    async def load(self, ctx, extension):
+        try:
+            self.bot.load_extension(extension)
+            await ctx.send(f"{extension} loaded")
+        except commands.ExtensionError as e:
+            await ctx.send(f"{e.__class__.__name__}: {e}")
+
+    @commands.is_owner()
+    @commands.command()
+    async def unload(self, ctx, extension):
+        try:
+            self.bot.unload_extension(extension)
+            await ctx.send(f"{extension} unloaded")
+        except commands.ExtensionError as e:
+            await ctx.send(f"{e.__class__.__name__}: {e}")
+
+    @commands.is_owner()
+    @commands.command()
+    async def reload(self, ctx, extension):
+        try:
+            self.bot.reload_extension(extension)
+            await ctx.send(f"{extension} reloaded")
+        except commands.ExtensionError as e:
+            await ctx.send(f"{e.__class__.__class__}: {e}")
+
+    @commands.is_owner()
+    @commands.command(aliases=["echo"])
+    async def say(self, ctx, *, message):
+        await ctx.message.delete()
+        await ctx.send(message)            
 
 def setup(bot):
     bot.add_cog(Owner(bot))

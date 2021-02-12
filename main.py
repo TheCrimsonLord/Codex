@@ -56,32 +56,5 @@ for filename in os.listdir("./cogs"):
         bot.load_extension(f"cogs.{filename[:-3]}")
 
 
-@commands.is_owner()
-@bot.command()
-async def load(ctx, extension):
-    bot.load_extension(f'cogs.{extension}')  # loads the extension in the "cogs" folder
-    embed = discord.Embed(title=f"Loaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-
-
-@commands.is_owner()
-@bot.command()
-async def unload(ctx, extension):
-    bot.unload_extension(f'cogs.{extension}')
-    embed = discord.Embed(title=f"Unloaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-    return
-
-
-@commands.is_owner()
-@bot.command()
-async def reload(ctx, extension):
-    bot.unload_extension(f'cogs.{extension}')
-    bot.load_extension(f'cogs.{extension}')
-    embed = discord.Embed(title=f"Reloaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-    return
-
-
 dotenv.load_dotenv()
 bot.run(os.getenv("TOKEN"))
