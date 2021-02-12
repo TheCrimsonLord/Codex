@@ -63,7 +63,12 @@ class Fun(commands.Cog):
     async def kill(self, ctx, user: discord.User):
         outcome = ["was shot.",
                    "was stabbed in the chest.",
-                   "dodged the attack."]
+                   "dodged the attack.",
+                   "was run over by a car",
+                   "was shot by a tank",
+                   "had a nuke dropped on them",
+                   "called the cops on you",
+                   "shot you instead"]
         embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
         await ctx.send(embed=embed)
 
