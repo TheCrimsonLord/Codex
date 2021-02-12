@@ -1,4 +1,6 @@
 import random
+from typing import Optional
+
 import aiohttp
 import discord
 from discord.ext import commands
@@ -41,9 +43,10 @@ class Fun(commands.Cog):
         await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 
     @commands.command(aliases=["memes"])
-    async def meme(self, ctx):
+    async def meme(self, ctx, subreddit: Optional[str]):
+        subreddit = subreddit or "memes"
         async with aiohttp.ClientSession() as cs:
-            async with cs.get("https://www.reddit.com/r/memes/hot.json?sort=hot") as r:
+            async with cs.get(f"https://www.reddit.com/r/{subreddit}/hot.json?sort=hot") as r:
                 res = await r.json()
         data2 = res["data"]["children"][random.randint(0, 25)]["data"]
         reddit_title = data2["title"]
@@ -63,7 +66,12 @@ class Fun(commands.Cog):
     async def kill(self, ctx, user: discord.User):
         outcome = ["was shot.",
                    "was stabbed in the chest.",
-                   "dodged the attack."]
+                   "dodged the attack.",
+                   "was run over by a car",
+                   "was shot by a tank",
+                   "had a nuke dropped on them",
+                   "called the cops on you",
+                   "shot you instead"]
         embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
         await ctx.send(embed=embed)
 

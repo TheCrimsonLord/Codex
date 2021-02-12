@@ -35,7 +35,7 @@ class Admin(commands.Cog):
         await member.kick(reason=f"{ctx.author} | {reason}")
         await ctx.send(embed=embed)
 
-    @commands.command(brief="Bans members")
+    @commands.command(brief="Bans members", aliases=["permkick"])
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -97,9 +97,17 @@ class Admin(commands.Cog):
         if not member:
             member = ctx.author
         perms = '\n'.join(perm for perm, value in member.guild_permissions if value)
-        embed = discord.Embed(title='Permissions for:', description=ctx.guild.name, colour=member.colour)
+        embed = discord.Embed(title='Permissions for:', description=ctx.guild.name, color=discord.Color.random())
         embed.set_author(icon_url=member.avatar_url, name=str(member.display_name))
         embed.add_field(name='\uFEFF', value=perms)
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def createrole(self, ctx, *, rolename):
+        await ctx.guild.create_role(name=rolename)
+        embed = discord.Embed(title=f"{ctx.author.display_name} created the role, {rolename}, successfully",
+                              color=discord.Color.random())
         await ctx.send(embed=embed)
 
 
