@@ -1,6 +1,6 @@
 import json
 import os
-import sys
+import platform
 
 import discord
 import dotenv
@@ -38,8 +38,7 @@ async def on_guild_remove(guild):
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online,
-                              activity=discord.Activity(type=discord.ActivityType.watching, name="The World Burn"))
-    pyver = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+                              activity=discord.Activity(type=discord.ActivityType.watching, name="Codex be created"))
     '''embed = discord.Embed(title=f"Codex has been booted up by TheCrimsonLord", color=discord.Color.random())
     for guild in bot.guilds:
         for channel in guild.channels:
@@ -47,40 +46,13 @@ async def on_ready():
                 await channel.send(embed=embed)'''
     print(f"Bot online as {bot.user}.")
     print(f"Discord {discord.__version__}")
-    print("I'm in " + str(len(bot.guilds)) + " servers")
-    print(f"Python {pyver}")
+    print(f"I'm in {str(len(bot.guilds))} servers")
+    print(f"Python {platform.python_version()}")
 
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
-
-
-@commands.is_owner()
-@bot.command()
-async def load(ctx, extension):
-    bot.load_extension(f'cogs.{extension}')  # loads the extension in the "cogs" folder
-    embed = discord.Embed(title=f"Loaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-
-
-@commands.is_owner()
-@bot.command()
-async def unload(ctx, extension):
-    bot.unload_extension(f'cogs.{extension}')
-    embed = discord.Embed(title=f"Unloaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-    return
-
-
-@commands.is_owner()
-@bot.command()
-async def reload(ctx, extension):
-    bot.unload_extension(f'cogs.{extension}')
-    bot.load_extension(f'cogs.{extension}')
-    embed = discord.Embed(title=f"Reloaded {extension}", color=discord.Color.random())
-    await ctx.send(embed=embed)
-    return
 
 
 dotenv.load_dotenv()
