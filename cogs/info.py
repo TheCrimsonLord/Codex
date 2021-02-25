@@ -1,4 +1,4 @@
-import sys
+import platform
 from typing import Optional
 
 import discord
@@ -10,17 +10,19 @@ from main import bot
 
 class Info(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot):  # noqa
         self.bot = bot
 
-    @commands.command(brief="Sends info about bot", aliases=["stats"])
+    @commands.command(brief="Gives info about bot", aliases=["stats"])
     async def botinfo(self, ctx):
-        pyver = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         embed = discord.Embed(title="Bot Information", color=discord.Color.random())
-        embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000)}ms", inline=False)
-        embed.add_field(name="Servers", value="I'm in " + str(len(bot.guilds)) + " servers", inline=False)
-        embed.add_field(name="Discord Version", value=discord.__version__, inline=False)
-        embed.add_field(name="Python Version", value=pyver, inline=False)
+        fields = [("Latency", f"{round(self.bot.latency * 1000)}ms", False),
+                  ("Servers", f"I'm in {str(len(bot.guilds))} servers", False),
+                  ("Discord Version", discord.__version__, False),
+                  ("Python Version", platform.python_version(), False),
+                  ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)", False)]
+        for name, value, inline in fields:
+            embed.add_field(name=name, value=value, inline=inline)
         await ctx.send(embed=embed)
 
     @commands.command(brief="Shows info on a user", aliases=["uinfo"])
@@ -54,7 +56,7 @@ class Info(commands.Cog):
                   ("Owner", ctx.guild.owner, True),
                   ("Region", ctx.guild.region, True),
                   ("Created at", ctx.guild.created_at.strftime("%c"), True),
-                  ("Members", (ctx.guild.member_count), True),
+                  ("Members", ctx.guild.member_count, True),
                   ("Text channels", len(ctx.guild.text_channels), True),
                   ("Voice channels", len(ctx.guild.voice_channels), True),
                   ("Categories", len(ctx.guild.categories), True),
@@ -66,5 +68,5 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot):  # noqa
     bot.add_cog(Info(bot))

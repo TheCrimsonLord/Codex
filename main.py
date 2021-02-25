@@ -1,6 +1,6 @@
 import json
 import os
-import sys
+import platform
 
 import discord
 import dotenv
@@ -38,8 +38,7 @@ async def on_guild_remove(guild):
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online,
-                              activity=discord.Activity(type=discord.ActivityType.watching, name="The World Burn"))
-    pyver = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+                              activity=discord.Activity(type=discord.ActivityType.watching, name="Codex be created"))
     '''embed = discord.Embed(title=f"Codex has been booted up by TheCrimsonLord", color=discord.Color.random())
     for guild in bot.guilds:
         for channel in guild.channels:
@@ -47,8 +46,8 @@ async def on_ready():
                 await channel.send(embed=embed)'''
     print(f"Bot online as {bot.user}.")
     print(f"Discord {discord.__version__}")
-    print("I'm in " + str(len(bot.guilds)) + " servers")
-    print(f"Python {pyver}")
+    print(f"I'm in {str(len(bot.guilds))} servers")
+    print(f"Python {platform.python_version()}")
 
 
 for filename in os.listdir("./cogs"):
