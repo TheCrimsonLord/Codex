@@ -2,24 +2,28 @@ import platform
 from typing import Optional
 
 import discord
-from discord import Member
+from discord import Member, message
 from discord.ext import commands
+import datetime
 
 from main import bot
 
 
 class Info(commands.Cog):
 
-    def __init__(self, bot):  # noqa
+    def __init__(self, _bot):
         self.bot = bot
 
     @commands.command(brief="Gives info about bot", aliases=["stats"])
     async def botinfo(self, ctx):
         embed = discord.Embed(title="Bot Information", color=discord.Color.random())
         fields = [("Latency", f"{round(self.bot.latency * 1000)}ms", False),
+                  ("Uptime", datetime, False),
                   ("Servers", f"I'm in {str(len(bot.guilds))} servers", False),
                   ("Discord Version", discord.__version__, False),
                   ("Python Version", platform.python_version(), False),
+                  ("GitHub", "Want to see all of the code for the bot, check out the GitHub [here]("
+                             "https://github.com/TheCrimsonLord/Codex)", False),
                   ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)", False)]
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
@@ -61,12 +65,11 @@ class Info(commands.Cog):
                   ("Voice channels", len(ctx.guild.voice_channels), True),
                   ("Categories", len(ctx.guild.categories), True),
                   ("Roles", len(ctx.guild.roles), True),
-                  ("Invites", len(await ctx.guild.invites()), True),
                   ("\u200b", "\u200b", True)]
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
         await ctx.send(embed=embed)
 
 
-def setup(bot):  # noqa
+def setup(_bot):
     bot.add_cog(Info(bot))

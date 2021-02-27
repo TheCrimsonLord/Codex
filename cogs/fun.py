@@ -5,10 +5,12 @@ import aiohttp
 import discord
 from discord.ext import commands
 
+from main import bot
+
 
 class Fun(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, _bot):
         self.bot = bot
 
     @commands.command()
@@ -75,6 +77,11 @@ class Fun(commands.Cog):
         embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=["echo"])
+    async def say(self, ctx, *, message):
+        await ctx.message.delete()
+        await ctx.send(message, allowed_mentions=discord.AllowedMentions.none())
 
-def setup(bot):
+
+def setup(_bot):
     bot.add_cog(Fun(bot))

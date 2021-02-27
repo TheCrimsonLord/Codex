@@ -1,6 +1,4 @@
 import logging
-import discord
-
 
 from discord.ext import commands
 
@@ -15,7 +13,7 @@ class ErrorHandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(
-        self, ctx: commands.Context, error: commands.CommandError
+            self, ctx: commands.Context, error: commands.CommandError
     ):
         """Handle errors caused by commands."""
         # Skips errors that were already handled locally.
@@ -37,17 +35,18 @@ class ErrorHandler(commands.Cog):
             await ctx.send(f'**{ctx.channel}** is not a NSFW channel')
 
         elif isinstance(error, commands.MissingRequiredArgument):
-           await ctx.send(f'You are missing some required arguments\n`{error.param.name}`')
+            await ctx.send(f'You are missing some required arguments\n`{error.param.name}`')
 
-        elif isinstance(error, commands.NotOwner) or isinstance(
-            error, commands.MissingPermissions
-        ):
+        elif isinstance(error, commands.NotOwner):
+            await ctx.send(str(error))
+
+        elif isinstance(error, commands.MissingPermissions):
             await ctx.send(str(error))
 
         elif isinstance(error, commands.CommandOnCooldown) or isinstance(
-            error, commands.CheckFailure
+                error, commands.CheckFailure
         ):
-            await ctx.send(error)
+            await ctx.send(str(error))
 
         elif isinstance(error, commands.DisabledCommand):  # SoonTM
             await ctx.send('This command is disabled')
@@ -57,14 +56,16 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.BotMissingPermissions):
             await ctx.send(str(error))
-            
 
         elif isinstance(error, commands.CommandInvokeError):
-            await ctx.send('If you are getting this error, contact TheCrimsonLord#3794 for help.\nThis is due to the fact he is a terrible coder')
+            await ctx.send(
+                'If you are getting this error, contact TheCrimsonLord#3794 for help.\nThis is due to the fact he is '
+                'a terrible coder')
             log.error(
                 f"{ctx.command.qualified_name} failed to execute. ",
                 exc_info=error.original,
             )
-            
+
+
 def setup(bot):
     bot.add_cog(ErrorHandler(bot))

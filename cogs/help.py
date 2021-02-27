@@ -6,7 +6,7 @@ from main import bot
 
 class Help(commands.Cog):
 
-    def __init__(self, bot):  # noqa
+    def __init__(self, _bot):
         self.bot = bot
 
     @commands.command(brief="Shows help for a command", aliases=["h"])
@@ -21,5 +21,5 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):  # noqa
+def setup(_bot):
     bot.add_cog(Help(bot))
