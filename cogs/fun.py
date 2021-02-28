@@ -42,18 +42,19 @@ class Fun(commands.Cog):
         embed = discord.Embed(title=question, description=random.choice(responses), color=discord.Color.random())
         await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 
-    @commands.command(aliases=["memes"])
+    @commands.command(aliases=["memes", "reddit"])
     async def meme(self, ctx, subreddit: Optional[str]):
         subreddit = subreddit or "memes"
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"https://www.reddit.com/r/{subreddit}/hot.json?sort=hot") as r:
                 res = await r.json()
-        data2 = res["data"]["children"][random.randint(0, 25)]["data"]
-        reddit_title = data2["title"]
-        reddit_link = data2["permalink"]
-        embed = discord.Embed(title=reddit_title, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
-        embed.set_image(url=data2["url"])
-        embed.set_footer(text=f"👍{data2['ups']} | 💬{data2['num_comments']}")
+        data = res["data"]["children"][random.randint(0, 25)]["data"]
+        desc = data['selftext'] or None
+        reddit_title = data["title"]
+        reddit_link = data["permalink"]
+        embed = discord.Embed(title=reddit_title, description=desc, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
+        embed.set_image(url=data["url"])
+        embed.set_footer(text=f"👍{data['ups']} | 💬{data['num_comments']}")
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -64,15 +65,17 @@ class Fun(commands.Cog):
 
     @commands.command(breif="Sends a random death message", aliases=["murder"])
     async def kill(self, ctx, user: discord.User):
-        outcome = ["was shot.",
-                   "was stabbed in the chest.",
-                   "dodged the attack.",
-                   "was run over by a car",
-                   "was shot by a tank",
-                   "had a nuke dropped on them",
-                   "called the cops on you",
-                   "shot you instead"]
-        embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
+        author = ctx.author.display_name
+        usr = user.display_name
+        outcome = [f"was shot.",
+                   f"{author} stabbed {usr} in the chest",
+                   f"{usr} dodged the attack",
+                   f"{usr} was run over by a car",
+                   f"{usr} was shot by a tank",
+                   f"{author} called in a tactical nuke\nto be dropped on them",
+                   f"{author} tried to stab {usr} and\ngot called the cops on themselves",
+                   f"{usr} shot you instead"]
+        embed = discord.Embed(title=f"{random.choice(outcome)}", color=discord.Color.random())
         await ctx.send(embed=embed)
 
     @commands.command(aliases=["echo"])
