@@ -2,16 +2,14 @@ import platform
 from typing import Optional
 
 import discord
-from discord import Member, message
+from discord import Member
 from discord.ext import commands
 import datetime
-
-from main import bot
 
 
 class Info(commands.Cog):
 
-    def __init__(self, _bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command(brief="Gives info about bot", aliases=["stats"])
@@ -19,7 +17,7 @@ class Info(commands.Cog):
         embed = discord.Embed(title="Bot Information", color=discord.Color.random())
         fields = [("Latency", f"{round(self.bot.latency * 1000)}ms", False),
                   ("Uptime", datetime, False),
-                  ("Servers", f"I'm in {str(len(bot.guilds))} servers", False),
+                  ("Servers", f"I'm in {str(len(self.bot.guilds))} servers", False),
                   ("Discord Version", discord.__version__, False),
                   ("Python Version", platform.python_version(), False),
                   ("GitHub", "Want to see all of the code for the bot, check out the GitHub [here]("
@@ -71,5 +69,5 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(_bot):
+def setup(bot):
     bot.add_cog(Info(bot))

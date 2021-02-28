@@ -42,6 +42,7 @@ async def on_guild_remove(guild):
 async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Activity(type=discord.ActivityType.watching, name="Codex be created"))
+
     print(f"Bot online as {bot.user}.")
     print(f"Discord {discord.__version__}")
     print(f"Python {platform.python_version()}")

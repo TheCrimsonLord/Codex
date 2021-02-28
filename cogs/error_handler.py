@@ -1,5 +1,5 @@
 import logging
-
+import discord
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -65,6 +65,11 @@ class ErrorHandler(commands.Cog):
                 f"{ctx.command.qualified_name} failed to execute. ",
                 exc_info=error.original,
             )
+            embed = discord.Embed(title="Baka!", description=(f"""You idiot coder.\n
+                        **{ctx.command.name}** in **{ctx.guild}** errored out because you're dumb\n
+                        error:\n{error}"""), color=discord.Color.red())
+            self.crimson = await self.bot.fetch_user(349663496465678338)
+            await self.crimson.send(embed=embed)
 
 
 def setup(bot):

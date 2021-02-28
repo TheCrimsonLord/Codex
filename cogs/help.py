@@ -1,12 +1,10 @@
 import discord
 from discord.ext import commands
 
-from main import bot
-
 
 class Help(commands.Cog):
 
-    def __init__(self, _bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command(brief="Shows help for a command", aliases=["h"])
@@ -17,9 +15,9 @@ class Help(commands.Cog):
                   ("Info", "Botinfo, Serverinfo, Userinfo", True)]
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
-        embed.set_thumbnail(url=bot.user.avatar_url)
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
         await ctx.send(embed=embed)
 
 
-def setup(_bot):
+def setup(bot):
     bot.add_cog(Help(bot))

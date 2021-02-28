@@ -5,12 +5,10 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from main import bot
-
 
 class Fun(commands.Cog):
 
-    def __init__(self, _bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
@@ -83,5 +81,5 @@ class Fun(commands.Cog):
         await ctx.send(message, allowed_mentions=discord.AllowedMentions.none())
 
 
-def setup(_bot):
+def setup(bot):
     bot.add_cog(Fun(bot))
