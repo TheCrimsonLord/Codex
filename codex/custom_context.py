@@ -101,7 +101,8 @@ class CodexContext(commands.Context):
                     footer: str = None,
                     not_inline: List[int] = [],
                     trash_reaction: bool = False,
-                    mentions: str = None):
+                    mentions: str = None,
+                    icon: str = None):
         if typ and clr:
             raise ValueError("typ and clr can not be both defined")
         embed = discord.Embed(
@@ -112,7 +113,7 @@ class CodexContext(commands.Context):
             allowed_mentions=mentions or discord.AllowedMentions.none()
         )
         if author:
-            embed.set_author(name=author)
+            embed.set_author(name=author, icon_url=icon)
         if image:
             if isinstance(image, str):
                 embed.set_image(url=image)

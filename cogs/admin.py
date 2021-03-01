@@ -95,11 +95,11 @@ class Admin(commands.Cog):
 
     @commands.command(brief="Shows permissions for a user", aliases=['permissions'])
     @commands.guild_only()
-    async def perms(self, ctx: codex.CodexContext, *, member: discord.Member = None):
-        member = member or ctx.author
-        perms = '\n'.join(perm for perm, value in member.guild_permissions if value)
-        await ctx.embed(title='Permissions for:', description=ctx.guild.name, author=member.display_name,
-                        fields=[("\uFEFF", perms)])
+    async def perms(self, ctx: codex.CodexContext, *, user: discord.User = None):
+        user = user or ctx.author
+        perms = '\n'.join(perm for perm, value in user.guild_permissions if value)
+        await ctx.embed(title='Permissions for:', description=ctx.guild.name, author=user.display_name,
+                        fields=[("\uFEFF", perms)], icon=user.avatar_url)
 
     @commands.has_permissions(manage_roles=True)
     @commands.command(brief="Creates a role with any name")
