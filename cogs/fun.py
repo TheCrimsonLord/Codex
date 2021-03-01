@@ -52,10 +52,17 @@ class Fun(commands.Cog):
         desc = data['selftext'] or None
         reddit_title = data["title"]
         reddit_link = data["permalink"]
-        embed = discord.Embed(title=reddit_title, description=desc, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
+        embed = discord.Embed(title=reddit_title, description=desc, url=f"https://reddit.com{reddit_link}",
+                              color=discord.Color.random())
         embed.set_image(url=data["url"])
         embed.set_footer(text=f"👍{data['ups']} | 💬{data['num_comments']}")
-        await ctx.send(embed=embed)
+        if data["over_18"]:
+            if ctx.channel.is_nsfw():
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f'**{ctx.channel}** is not a NSFW channel')
+        else:
+            await ctx.send(embed=embed)
 
     @commands.command()
     async def clone(self, ctx, user: discord.User):
