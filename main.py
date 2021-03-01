@@ -6,6 +6,8 @@ import discord
 import dotenv
 from discord.ext import commands
 
+import codex
+
 
 def get_prefix(_bot, message):
     with open("prefixes.json", "r") as f:
@@ -16,8 +18,7 @@ def get_prefix(_bot, message):
         return commands.when_mentioned_or(prefixes.get(str(message.guild.id), "."))(bot, message)
 
 
-bot = commands.Bot(command_prefix=get_prefix)
-bot.help_command = None
+bot = codex.CodexBot(command_prefix=get_prefix, help_command=None)
 
 
 @bot.event
