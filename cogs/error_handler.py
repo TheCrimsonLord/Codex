@@ -65,13 +65,13 @@ class ErrorHandler(commands.Cog):
                                   'to the fact he is a terrible coder')
             log.error(
                 f"{ctx.command.qualified_name} failed to execute. ",
-                exc_info=error.original,
-            )
-            embed = discord.Embed(title="AHHH!", description=(f"""You idiot coder.\n
+                exc_info=error.original)
+            for guild in self.bot.guilds:
+                for channel in guild.channels:
+                    if channel.id == 816183861893398548:
+                        await channel.embed(title="AHHH!", description=(f"""You idiot coder.\n
                         **{ctx.author}** tried to run **{ctx.command.name}** in **{ctx.guild}** and it errored out 
                         because you're dumb\n error:\n{error}"""), color=discord.Color.red())
-            self.crimson = await self.bot.fetch_user(349663496465678338)
-            await self.crimson.send(embed=embed)
 
 
 def setup(bot):
