@@ -14,9 +14,9 @@ class Owner(commands.Cog):
     @commands.is_owner()
     @commands.command(brief="Logs out the bot", aliases=["forcequit", "forcestop", "ddos"])
     async def die(self, ctx: codex.CodexContext):
-        await ctx.embed(title="Mr. Stark?", clr=discord.Colour.red())
+        await ctx.embed(title="Mr. Stark?", clr=discord.Color.red())
         await asyncio.sleep(.5)
-        await ctx.embed(title="I don't feel so good...", clr=discord.Colour.blue())
+        await ctx.embed(title="I don't feel so good...", clr=discord.Color.blue())
         await asyncio.sleep(1)
         await self.bot.logout()
 

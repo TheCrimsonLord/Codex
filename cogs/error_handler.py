@@ -70,8 +70,8 @@ class ErrorHandler(commands.Cog):
             embed = discord.Embed(title="AHHH!", description=(f"""You idiot coder.\n
                         **{ctx.author}** tried to run **{ctx.command.name}** in **{ctx.guild}** and it errored out 
                         because you're dumb\n error:\n{error}"""), color=discord.Color.red())
-            """self.crimson = await self.bot.fetch_user(349663496465678338)
-            await self.crimson.send(embed=embed)"""
+            self.crimson = await self.bot.fetch_user(349663496465678338)
+            await self.crimson.send(embed=embed)
 
 
 def setup(bot):

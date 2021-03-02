@@ -1,7 +1,7 @@
 import asyncio
 import io
 import random
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Callable
 
 import discord
 from PIL.Image import Image
@@ -72,6 +72,22 @@ class CodexContext(commands.Context):
         else:
             await message.delete()
 
+    async def send_ok(self, message: str, *, user: discord.abc.User = None,
+                      title: str = None, trash: bool = False, ping: bool = False):
+        if not user:
+            user = self.author
+        msg = await self.send(
+            user.mention if ping else None,
+            embed=discord.Embed(
+                title=title,
+                description=f"{_wrap_user(user) if user else ''}{message}",
+                colour=discord.Color.random()
+            ))
+        if trash:
+            await self.trash_reaction(msg)
+        else:
+            return msg
+
     async def send_error(self, message: str, *, user: discord.abc.User = None,
                          title: str = None, trash: bool = False, ping: bool = False):
         if not user:
@@ -113,6 +129,8 @@ class CodexContext(commands.Context):
             allowed_mentions=mentions or discord.AllowedMentions.none()
         )
         if author:
+            embed.set_author(name=author)
+        if icon:
             embed.set_author(name=author, icon_url=icon)
         if image:
             if isinstance(image, str):
@@ -141,3 +159,29 @@ class CodexContext(commands.Context):
             await self.trash_reaction(msg)
         else:
             return msg
+
+    async def input(self, typ: type, cancel_str: str = "cancel", ch: Callable = None, err=None, check_author=True,
+                    return_author=False, del_error=60, del_response=False, timeout=60.0):
+        def check(m):
+            return ((m.author == self.author and m.channel == self.channel) or not check_author) and not m.author.bot
+
+        while True:
+            try:
+                inp: discord.Message = await self.bot.wait_for('message', check=check, timeout=timeout)
+                if del_response:
+                    await inp.delete()
+                if inp.content.lower() == cancel_str.lower():
+                    return (None, None) if return_author else None
+                res = typ(inp.content.lower())
+                if ch:
+                    if not ch(res):
+                        raise ValueError
+                return (res, inp.author) if return_author else res
+            except ValueError:
+                await self.send(err or "That's not a valid response, try again" +
+                                ("" if not cancel_str else f" or type `{cancel_str}` to quit"),
+                                delete_after=del_error)
+                continue
+            except asyncio.TimeoutError:
+                await self.send("You took too long to respond ): Try to start over", delete_after=del_error)
+                return (None, None) if return_author else None

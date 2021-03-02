@@ -1,33 +1,59 @@
-import datetime
 import platform
-from typing import Optional
+from datetime import datetime
+from typing import Optional, List
 
 import discord
 from discord import Member
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 import codex
+from libs.conversions import dhm_notation
 
 
 class Info(commands.Cog):
 
     def __init__(self, bot: codex.CodexBot):
         self.bot = bot
+        self.mem: int = 0
+        self.max_mem: int = 0
+        self.ping: int = 0
+        self.ping_run: List[int] = []
+        self.avg_ping: int = 0
+
+    @tasks.loop(seconds=2)
+    async def resource_loop(self):
+        self.ping = round(self.bot.latency * 1000)
+        self.ping_run.append(self.ping)
+        if len(self.ping_run) > 30 * 60:
+            del self.ping_run[0]
+        self.avg_ping = round(sum(self.ping_run) / len(self.ping_run))
 
     @commands.command(brief="Gives info about bot", aliases=["stats"])
     async def botinfo(self, ctx: codex.CodexContext):
-        await ctx.embed(title="Bot Information",
+        text_channels = 0
+        voice_channels = 0
+        for channel in self.bot.get_all_channels():
+            if isinstance(channel, discord.TextChannel):
+                text_channels += 1
+            if isinstance(channel, discord.VoiceChannel):
+                voice_channels += 1
+        await ctx.embed(title="Bot Information", author=f"Codex 0.2.3",
                         fields=
-                        [("Latency", f"{round(self.bot.latency * 1000)}ms"),
-                         ("Uptime", datetime.datetime.now()),
-                         ("Servers", f"I'm in {str(len(self.bot.guilds))} servers"),
+                        [("Ping", f"{self.ping} ms\n"
+                                  f"{self.avg_ping} ms (1h average)"),
+                         ("Messages", f"{self.bot.messages}"),
+                         ("Commands\nExecuted", f"{self.bot.commands_executed}"),
+                         ("Uptime", dhm_notation(datetime.now() - self.bot.start_time)),
+                         ("Presence", f"{len(self.bot.guilds)} Guilds\n"
+                                      f"{text_channels} Text Channels\n"
+                                      f"{voice_channels} Voice Channels\n"
+                                      f"{len(self.bot.users)} Users Cached"),
+
                          ("Discord Version", discord.__version__),
                          ("Python Version", platform.python_version()),
                          ("GitHub", "Want to see all of the code for the bot, check out the GitHub [here]("
                                     "https://github.com/TheCrimsonLord/Codex)"),
-                         ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)")],
-                        thumbnail=self.bot.user.avatar_url,
-                        not_inline=[0, 1, 2, 4, 5, 6])
+                         ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)")])
 
     @commands.command(brief="Shows info on a user", aliases=["uinfo"])
     async def userinfo(self, ctx: codex.CodexContext, user: Optional[Member]):
@@ -37,7 +63,7 @@ class Info(commands.Cog):
         r: discord.Role
         hoisted_roles = [r for r in user.roles if r.hoist and r.id != ctx.guild.id]
         normal_roles = [r for r in user.roles if not r.hoist and r.id != ctx.guild.id]
-        await ctx.embed(title=f"Info for {user}",
+        await ctx.embed(author=f"Info for {user}", icon=user.avatar_url,
                         fields=
                         [("ID", user.id),
                          ("Joined Server", joined_at),
@@ -48,8 +74,7 @@ class Info(commands.Cog):
                           " ".join([r.mention for r in normal_roles[:-6:-1] if
                                     r.id not in [x.id for x in hoisted_roles]]) if
                           len(normal_roles) > 1 else "None"),
-                         ("Top Role", user.roles[-1].mention if len(user.roles) > 1 else "None")],
-                        thumbnail=self.bot.user.avatar_url)
+                         ("Top Role", user.roles[-1].mention if len(user.roles) > 1 else "None")])
 
     @commands.command(brief="Shows info about a server", aliases=["guildinfo"])
     async def serverinfo(self, ctx: codex.CodexContext):

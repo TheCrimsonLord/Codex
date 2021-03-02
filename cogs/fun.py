@@ -16,7 +16,7 @@ class Fun(commands.Cog):
 
     @property
     def description(self):
-        return "Fun module"
+        return "Fun little commands that"
 
     @commands.command(brief="Sends the latency of the bot")
     async def ping(self, ctx: codex.CodexContext):

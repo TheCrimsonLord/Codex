@@ -16,7 +16,7 @@ class Admin(commands.Cog):
 
     @property
     def description(self):
-        return "Admin module"
+        return "Admin commands for managing a server"
 
     @commands.command(brief="Clears messages", aliases=["purge"])
     @commands.guild_only()
@@ -134,6 +134,20 @@ class Admin(commands.Cog):
         muted = discord.utils.get(ctx.guild.roles, name="Muted")
         await user.remove_roles(muted)
         await ctx.embed(title=f"{user.display_name} was unmuted by {ctx.author.display_name}")
+
+    @commands.has_permissions(manage_nicknames=True)
+    @commands.bot_has_permissions(manage_nicknames=True)
+    @commands.command(brief="Set a member's nickname", aliases=["nick"])
+    async def setnick(self, ctx: codex.CodexContext, member: discord.Member, *, nickname: str):
+        if member.top_role >= ctx.author.top_role:
+            raise codex.RoleHierarchyError("You can't change the nickname of a person with a role higher than yours!")
+        if member.id == ctx.me.id:
+            await ctx.me.edit(nick=nickname)
+        else:
+            if member.top_role >= ctx.me.top_role:
+                raise codex.RoleHierarchyError("I can't change the nickname of a person with a role higher than mine!")
+            await member.edit(nick=nickname)
+        await ctx.send_ok(f"{member.mention}'s nickname set to {nickname}")
 
 
 def setup(bot):
