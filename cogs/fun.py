@@ -7,6 +7,7 @@ from discord.ext import commands
 
 import codex
 from codex.custom_context import text_to_owo
+from games.ttt import TicTacToe
 
 
 class Fun(commands.Cog):
@@ -93,6 +94,10 @@ class Fun(commands.Cog):
     @commands.command(brief="Turns any message to owo")
     async def owo(self, ctx: codex.CodexContext, *, msg):
         await ctx.embed(title=text_to_owo(msg))
+
+    @commands.command(brief="Play tic tac toe", aliases=["ttt"])
+    async def tictactoe(self, ctx: codex.CodexContext):
+        await TicTacToe(ctx).play()
 
 
 def setup(bot):
