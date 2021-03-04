@@ -81,7 +81,7 @@ class CodexContext(commands.Context):
             embed=discord.Embed(
                 title=title,
                 description=f"{_wrap_user(user) if user else ''}{message}",
-                colour=discord.Color.random()
+                color=discord.Color.random()
             ))
         if trash:
             await self.trash_reaction(msg)
@@ -97,7 +97,7 @@ class CodexContext(commands.Context):
             embed=discord.Embed(
                 title=title,
                 description=f"{_wrap_user(user) if user else ''}{message}",
-                colour=discord.Color.random()
+                color=discord.Color.random()
             ))
         if trash:
             await self.trash_reaction(msg)
@@ -124,7 +124,7 @@ class CodexContext(commands.Context):
         embed = discord.Embed(
             title=title,
             description=description,
-            colour=clr or discord.Color.random(),
+            color=clr or discord.Color.random(),
             title_url=title_url,
             allowed_mentions=mentions or discord.AllowedMentions.none()
         )

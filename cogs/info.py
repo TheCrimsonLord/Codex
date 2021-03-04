@@ -53,7 +53,8 @@ class Info(commands.Cog):
                          ("Python Version", platform.python_version()),
                          ("GitHub", "Want to see all of the code for the bot, check out the GitHub [here]("
                                     "https://github.com/TheCrimsonLord/Codex)"),
-                         ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)")])
+                         ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)")],
+                        thumbnail=self.bot.user.avatar_url)
 
     @commands.command(brief="Shows info on a user", aliases=["uinfo"])
     async def userinfo(self, ctx: codex.CodexContext, user: Optional[Member]):
