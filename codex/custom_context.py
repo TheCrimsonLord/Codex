@@ -118,7 +118,8 @@ class CodexContext(commands.Context):
                     not_inline: List[int] = [],
                     trash_reaction: bool = False,
                     mentions: str = None,
-                    icon: str = None):
+                    icon: str = None,
+                    image_url: str = None):
         if typ and clr:
             raise ValueError("typ and clr can not be both defined")
         embed = discord.Embed(
@@ -148,6 +149,8 @@ class CodexContext(commands.Context):
                 embed.set_image(url="attachment://image.png")
         else:
             f = None
+        if image_url:
+            embed.set_image(url=image_url)
         if footer:
             embed.set_footer(text=footer)
         if thumbnail:

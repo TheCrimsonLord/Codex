@@ -17,7 +17,7 @@ class Fun(commands.Cog):
 
     @property
     def description(self):
-        return "Fun little commands that"
+        return "Fun little command"
 
     @commands.command(brief="Sends the latency of the bot")
     async def ping(self, ctx: codex.CodexContext):
@@ -70,7 +70,7 @@ class Fun(commands.Cog):
 
     @commands.command(brief="Clones your friends")
     async def clone(self, ctx: codex.CodexContext, user: discord.User):
-        await ctx.embed(title=f"Cloning Processes of {user.display_name} Complete", image=user.avatar_url)
+        await ctx.embed(title=f"Cloning Processes of {user.display_name} Complete", image_url=user.avatar_url)
 
     @commands.command(breif="Sends a random death message", aliases=["murder"])
     async def kill(self, ctx: codex.CodexContext, user: discord.User):

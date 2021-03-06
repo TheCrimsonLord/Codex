@@ -11,6 +11,10 @@ class Owner(commands.Cog):
     def __init__(self, bot: codex.CodexBot):
         self.bot = bot
 
+    @property
+    def description(self):
+        return "Owner only commands"
+
     @commands.is_owner()
     @commands.command(brief="Logs out the bot", aliases=["forcequit", "forcestop", "ddos"])
     async def die(self, ctx: codex.CodexContext):

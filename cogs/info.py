@@ -20,6 +20,10 @@ class Info(commands.Cog):
         self.ping_run: List[int] = []
         self.avg_ping: int = 0
 
+    @property
+    def description(self):
+        return "Info commands"
+
     @tasks.loop(seconds=2)
     async def resource_loop(self):
         self.ping = round(self.bot.latency * 1000)
