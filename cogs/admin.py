@@ -62,11 +62,11 @@ class Admin(commands.Cog):
                 await ctx.guild.unban(ban_entry.user, reason=str(ctx.author))
                 return await ctx.embed(title=f"{ctx.author} unbanned {ban_entry.user}")
 
-    @commands.command(brief="Changes the command prefix", aliases=["cp"])
+    @commands.command(brief="Changes the command prefix")
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
-    async def changeprefix(self, ctx: codex.CodexContext, prefix):
+    async def setprefix(self, ctx: codex.CodexContext, prefix):
         with open("prefixes.json", "r") as f:
             prefixes = json.load(f)
         prefixes[str(ctx.guild.id)] = prefix
