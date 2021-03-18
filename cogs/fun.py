@@ -5,19 +5,26 @@ import aiohttp
 import discord
 from discord.ext import commands
 
+import codex
+from codex.custom_context import text_to_owo
+from games.ttt import TicTacToe
+
 
 class Fun(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot: codex.CodexBot):
         self.bot = bot
 
-    @commands.command()
-    async def ping(self, ctx):
-        embed = discord.Embed(title=f"Pong {round(self.bot.latency * 1000)}ms", color=discord.Color.random())
-        await ctx.send(embed=embed)
+    @property
+    def description(self):
+        return "Fun little command"
+
+    @commands.command(brief="Sends the latency of the bot")
+    async def ping(self, ctx: codex.CodexContext):
+        await ctx.embed(title=f"Pong {round(self.bot.latency * 1000)}ms")
 
     @commands.command(name="8ball", brief="Ask and you shall receive ")
-    async def _8ball(self, ctx, *, question):
+    async def _8ball(self, ctx: codex.CodexContext, *, question):
         responses = ["It is certain",
                      "It is decidedly so.",
                      "Without a doubt.",
@@ -39,41 +46,59 @@ class Fun(commands.Cog):
                      "My sources say no.",
                      "Outlook not so good.",
                      "Very doubtful."]
-        embed = discord.Embed(title=question, description=random.choice(responses), color=discord.Color.random())
-        await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
+        await ctx.embed(title=random.choice(responses), description=question)
 
-    @commands.command(aliases=["memes"])
-    async def meme(self, ctx, subreddit: Optional[str]):
+    @commands.command(aliases=["memes", "reddit"], brief="Sends a hot post from any subreddit")
+    async def meme(self, ctx: codex.CodexContext, subreddit: Optional[str]):
         subreddit = subreddit or "memes"
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"https://www.reddit.com/r/{subreddit}/hot.json?sort=hot") as r:
                 res = await r.json()
-        data2 = res["data"]["children"][random.randint(0, 25)]["data"]
-        reddit_title = data2["title"]
-        reddit_link = data2["permalink"]
-        embed = discord.Embed(title=reddit_title, url=f"https://reddit.com{reddit_link}", color=discord.Color.random())
-        embed.set_image(url=data2["url"])
-        embed.set_footer(text=f"👍{data2['ups']} | 💬{data2['num_comments']}")
-        await ctx.send(embed=embed)
+        data = res["data"]["children"][random.randint(0, 25)]["data"]
+        desc = data["selftext"] or None
+        reddit_title = data["title"]
+        reddit_link = data["permalink"]
+        if data["over_18"]:
+            if ctx.channel.is_nsfw():
+                await ctx.embed(title=reddit_title, description=desc, title_url=f"https://reddit.com{reddit_link}",
+                                image=data["url"], footer=f"👍{data['ups']} | 💬{data['num_comments']}")
+            else:
+                await ctx.embed(title=f"**{ctx.channel}** is not a NSFW channel,\nbut you can still look at it on "
+                                      f"your own if you want.", title_url=f"https://reddit.com{reddit_link}")
+        else:
+            await ctx.embed(title=reddit_title, description=desc, title_url=f"https://reddit.com{reddit_link}",
+                            image=data["url"], footer=f"👍{data['ups']} | 💬{data['num_comments']}")
 
-    @commands.command()
-    async def clone(self, ctx, user: discord.User):
-        embed = discord.Embed(title=f"Cloning Processes of {user.display_name} Complete", color=discord.Color.random())
-        embed.set_image(url=user.avatar_url)
-        await ctx.send(embed=embed)
+    @commands.command(brief="Clones your friends")
+    async def clone(self, ctx: codex.CodexContext, user: discord.User):
+        await ctx.embed(title=f"Cloning Processes of {user.display_name} Complete", image_url=user.avatar_url)
 
     @commands.command(breif="Sends a random death message", aliases=["murder"])
-    async def kill(self, ctx, user: discord.User):
-        outcome = ["was shot.",
-                   "was stabbed in the chest.",
-                   "dodged the attack.",
-                   "was run over by a car",
-                   "was shot by a tank",
-                   "had a nuke dropped on them",
-                   "called the cops on you",
-                   "shot you instead"]
-        embed = discord.Embed(title=f"{user.display_name} {random.choice(outcome)}", color=discord.Color.random())
-        await ctx.send(embed=embed)
+    async def kill(self, ctx: codex.CodexContext, user: discord.User):
+        author = ctx.author.display_name
+        usr = user.display_name
+        outcome = [f"was shot.",
+                   f"{author} stabbed {usr} in the chest",
+                   f"{usr} dodged the attack",
+                   f"{usr} was run over by a car",
+                   f"{usr} was shot by a tank",
+                   f"{author} called in a tactical nuke\nto be dropped on them",
+                   f"{author} tried to stab {usr} and\ngot called the cops on themself",
+                   f"{usr} shot you instead"]
+        await ctx.embed(title=f"{random.choice(outcome)}")
+
+    @commands.command(brief="Allows you to make the bot say whatever you want", aliases=["echo"])
+    async def say(self, ctx: codex.CodexContext, *, message):
+        await ctx.message.delete()
+        await ctx.embed(title=f"{ctx.author.display_name} says", description=message)
+
+    @commands.command(brief="Turns any message to owo")
+    async def owo(self, ctx: codex.CodexContext, *, msg):
+        await ctx.embed(title="UwU", description=text_to_owo(msg))
+
+    @commands.command(brief="Play tic tac toe", aliases=["ttt"])
+    async def tictactoe(self, ctx: codex.CodexContext):
+        await TicTacToe(ctx).play()
 
 
 def setup(bot):

@@ -6,15 +6,19 @@ import discord
 import dotenv
 from discord.ext import commands
 
+import codex
 
-def get_prefix(bot, message):  # noqa
+
+def get_prefix(_bot, message):
     with open("prefixes.json", "r") as f:
         prefixes = json.load(f)
-    return commands.when_mentioned_or(prefixes.get(str(message.guild.id), "."))(bot, message)
+    if not message.guild:
+        return commands.when_mentioned_or(".")(bot, message)
+    else:
+        return commands.when_mentioned_or(prefixes.get(str(message.guild.id), "."))(bot, message)
 
 
-bot = commands.Bot(command_prefix=get_prefix)
-bot.help_command = None
+bot = codex.CodexBot(command_prefix=get_prefix, help_command=None)
 
 
 @bot.event
@@ -39,21 +43,16 @@ async def on_guild_remove(guild):
 async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Activity(type=discord.ActivityType.watching, name="Codex be created"))
-    '''embed = discord.Embed(title=f"Codex has been booted up by TheCrimsonLord", color=discord.Color.random())
-    for guild in bot.guilds:
-        for channel in guild.channels:
-            if channel.id == 803109205699461123:
-                await channel.send(embed=embed)'''
     print(f"Bot online as {bot.user}.")
     print(f"Discord {discord.__version__}")
-    print(f"I'm in {str(len(bot.guilds))} servers")
     print(f"Python {platform.python_version()}")
+    print(f"I'm in {str(len(bot.guilds))} servers")
+    print(f"Loaded {str(len(bot.cogs))} cogs")
 
 
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
-
 
 dotenv.load_dotenv()
 bot.run(os.getenv("TOKEN"))
