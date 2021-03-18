@@ -28,7 +28,7 @@ class Owner(commands.Cog):
     @commands.command(brief="Loads a cog")
     async def load(self, ctx: codex.CodexContext, extension):
         try:
-            self.bot.load_extension(extension)
+            self.bot.load_extension(f"cogs.{extension}")
             await ctx.embed(title=f"{extension} loaded")
         except commands.ExtensionError as e:
             await ctx.embed(title=f"{e.__class__.__name__}: {e}")
@@ -37,7 +37,7 @@ class Owner(commands.Cog):
     @commands.command(brief="Unloads a cog")
     async def unload(self, ctx: codex.CodexContext, extension):
         try:
-            self.bot.unload_extension(extension)
+            self.bot.unload_extension(f"cogs.{extension}")
             await ctx.embed(title=f"{extension} unloaded")
         except commands.ExtensionError as e:
             await ctx.embed(title=f"{e.__class__.__name__}: {e}")
@@ -46,7 +46,7 @@ class Owner(commands.Cog):
     @commands.command(brief="Reloads a cog")
     async def reload(self, ctx: codex.CodexContext, extension):
         try:
-            self.bot.reload_extension("cogs.{extension}")
+            self.bot.reload_extension(f"cogs.{extension}")
             await ctx.embed(title=f"{extension} reloaded")
         except commands.ExtensionError as e:
             await ctx.embed(title=f"{e.__class__.__class__}: {e}")

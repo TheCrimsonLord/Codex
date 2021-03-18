@@ -46,7 +46,7 @@ class Fun(commands.Cog):
                      "My sources say no.",
                      "Outlook not so good.",
                      "Very doubtful."]
-        await ctx.embed(title=question, description=random.choice(responses))
+        await ctx.embed(title=random.choice(responses), description=question)
 
     @commands.command(aliases=["memes", "reddit"], brief="Sends a hot post from any subreddit")
     async def meme(self, ctx: codex.CodexContext, subreddit: Optional[str]):
@@ -55,7 +55,7 @@ class Fun(commands.Cog):
             async with cs.get(f"https://www.reddit.com/r/{subreddit}/hot.json?sort=hot") as r:
                 res = await r.json()
         data = res["data"]["children"][random.randint(0, 25)]["data"]
-        desc = data['selftext'] or None
+        desc = data["selftext"] or None
         reddit_title = data["title"]
         reddit_link = data["permalink"]
         if data["over_18"]:
@@ -63,7 +63,8 @@ class Fun(commands.Cog):
                 await ctx.embed(title=reddit_title, description=desc, title_url=f"https://reddit.com{reddit_link}",
                                 image=data["url"], footer=f"👍{data['ups']} | 💬{data['num_comments']}")
             else:
-                await ctx.embed(title=f'**{ctx.channel}** is not a NSFW channel')
+                await ctx.embed(title=f"**{ctx.channel}** is not a NSFW channel,\nbut you can still look at it on "
+                                      f"your own if you want.", title_url=f"https://reddit.com{reddit_link}")
         else:
             await ctx.embed(title=reddit_title, description=desc, title_url=f"https://reddit.com{reddit_link}",
                             image=data["url"], footer=f"👍{data['ups']} | 💬{data['num_comments']}")
@@ -82,18 +83,18 @@ class Fun(commands.Cog):
                    f"{usr} was run over by a car",
                    f"{usr} was shot by a tank",
                    f"{author} called in a tactical nuke\nto be dropped on them",
-                   f"{author} tried to stab {usr} and\ngot called the cops on themselves",
+                   f"{author} tried to stab {usr} and\ngot called the cops on themself",
                    f"{usr} shot you instead"]
         await ctx.embed(title=f"{random.choice(outcome)}")
 
     @commands.command(brief="Allows you to make the bot say whatever you want", aliases=["echo"])
     async def say(self, ctx: codex.CodexContext, *, message):
         await ctx.message.delete()
-        await ctx.embed(title=message)
+        await ctx.embed(title=f"{ctx.author.display_name} says", description=message)
 
     @commands.command(brief="Turns any message to owo")
     async def owo(self, ctx: codex.CodexContext, *, msg):
-        await ctx.embed(title=text_to_owo(msg))
+        await ctx.embed(title="UwU", description=text_to_owo(msg))
 
     @commands.command(brief="Play tic tac toe", aliases=["ttt"])
     async def tictactoe(self, ctx: codex.CodexContext):

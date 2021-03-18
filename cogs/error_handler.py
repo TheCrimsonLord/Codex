@@ -29,16 +29,16 @@ class ErrorHandler(commands.Cog):
             return
 
         if isinstance(error, commands.NoPrivateMessage):
-            await ctx.embed(title='This Command Cannot Be Used In Private DMS')
+            await ctx.embed(title="This Command Cannot Be Used In Private DMS")
 
         elif isinstance(error, commands.TooManyArguments):
-            await ctx.embed(title='You Passed In Too Many Arguments')
+            await ctx.embed(title="You Passed In Too Many Arguments")
 
         elif isinstance(error, commands.NSFWChannelRequired):
-            await ctx.embed(title=f'**{ctx.channel}** is not a NSFW channel')
+            await ctx.embed(title=f"**{ctx.channel}** is not a NSFW channel")
 
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.embed(title=f'You are missing some required arguments\n`{error.param.name}`')
+            await ctx.embed(title=f"You are missing some required arguments\n`{error.param.name}`")
 
         elif isinstance(error, commands.NotOwner):
             await ctx.embed(title=str(error))
@@ -52,17 +52,17 @@ class ErrorHandler(commands.Cog):
             await ctx.embed(title=str(error))
 
         elif isinstance(error, commands.DisabledCommand):  # SoonTM
-            await ctx.embed(title='This command is disabled')
+            await ctx.embed(title="This command is disabled")
 
         elif isinstance(error, commands.BadArgument):
-            await ctx.embed(title=f'You passed in a bad argument\n{error}')
+            await ctx.embed(title=f"You passed in a bad argument\n{error}")
 
         elif isinstance(error, commands.BotMissingPermissions):
             await ctx.embed(title=str(error))
 
         elif isinstance(error, commands.CommandInvokeError):
-            await ctx.embed(title='If you are getting this error, contact TheCrimsonLord#3794 for help.\nThis is due '
-                                  'to the fact he is a terrible coder')
+            await ctx.embed(title="If you are getting this error, contact TheCrimsonLord#3794 for help.\nThis is due "
+                                  "to the fact he is a terrible coder")
             log.error(
                 f"{ctx.command.qualified_name} failed to execute. ",
                 exc_info=error.original)

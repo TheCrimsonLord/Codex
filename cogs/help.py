@@ -52,8 +52,8 @@ class Help(commands.Cog):
                              ("Aliases", ", ".join([f"`{a}`" for a in cmd.aliases]) if cmd.aliases else [])],
                             thumbnail=self.bot.user.avatar_url,
                             not_inline=[0, 1, 2, 4])
-            if not cmd:
-                return await ctx.send_error(f"Command `{command}` not found.")
+        else:
+            return await ctx.send_error(f"Command `{command}` not found.")
 
 
 def setup(bot):

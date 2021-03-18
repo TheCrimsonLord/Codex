@@ -62,24 +62,6 @@ class Admin(commands.Cog):
                 await ctx.guild.unban(ban_entry.user, reason=str(ctx.author))
                 return await ctx.embed(title=f"{ctx.author} unbanned {ban_entry.user}")
 
-    @commands.command()
-    @commands.guild_only()
-    @commands.has_permissions(manage_messages=True)
-    @commands.bot_has_permissions(manage_messages=True)
-    async def setrules(self, ctx: codex.CodexContext, *, inp: str):
-        amount: int = 1
-        stop_at = dt.datetime.now() - dt.timedelta(days=14)
-        messages_list = []
-        async for message in ctx.channel.history(limit=amount):
-            if message.created_at < stop_at:
-                break
-            messages_list.append(message)
-            if len(messages_list) > 90:
-                await ctx.channel.delete_messages(messages_list)
-                messages_list = []
-        await ctx.channel.delete_messages(messages_list)
-        await ctx.embed(title="Rules", description=inp)
-
     @commands.command(brief="Changes the command prefix", aliases=["cp"])
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
@@ -93,12 +75,12 @@ class Admin(commands.Cog):
         await ctx.embed(title="Prefix has successfully been changed", description=f"You can now use {prefix} to "
                                                                                   f"activate commands")
 
-    @commands.command(brief="Shows permissions for a user", aliases=['permissions'])
+    @commands.command(brief="Shows permissions for a user", aliases=["permissions"])
     @commands.guild_only()
     async def perms(self, ctx: codex.CodexContext, *, user: discord.User = None):
         user = user or ctx.author
-        perms = '\n'.join(perm for perm, value in user.guild_permissions if value)
-        await ctx.embed(title='Permissions for:', description=ctx.guild.name, author=user.display_name,
+        perms = "\n".join(perm for perm, value in user.guild_permissions if value)
+        await ctx.embed(title="Permissions for:", description=ctx.guild.name, author=user.display_name,
                         fields=[("\uFEFF", perms)], icon=user.avatar_url)
 
     @commands.has_permissions(manage_roles=True)
@@ -109,13 +91,13 @@ class Admin(commands.Cog):
         await ctx.embed(title=f"{ctx.author.display_name} created the role, {rolename}, successfully")
 
     @commands.has_permissions(manage_messages=True)
-    @commands.command(brief="Mutes a member")
+    @commands.command(brief="Mutes a member, note requires a role called Muted to have already been made")
     async def mute(self, ctx: codex.CodexContext, member: discord.Member, *, reason: Optional[str]):
         guild = ctx.guild
         user = member
         reason = reason or "they where being to loud"
         if member == ctx.message.author:
-            await ctx.embed(title=f'**{ctx.message.author},** you cannot mute yourself, silly.')
+            await ctx.embed(title=f"**{ctx.message.author},** you cannot mute yourself, silly.")
         for role in guild.roles:
             if role.name == "Muted":
                 if role in user.roles:

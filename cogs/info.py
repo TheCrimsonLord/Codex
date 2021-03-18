@@ -41,9 +41,9 @@ class Info(commands.Cog):
                 text_channels += 1
             if isinstance(channel, discord.VoiceChannel):
                 voice_channels += 1
-        await ctx.embed(title="Bot Information", author=f"Codex 0.2.3",
+        await ctx.embed(title="Bot Information", author=f"Codex 1.0.0",
                         fields=
-                        [("Ping", f"{self.ping} ms\n"
+                        [("Ping", f"{round(self.bot.latency * 1000)} ms\n"
                                   f"{self.avg_ping} ms (1h average)"),
                          ("Messages", f"{self.bot.messages}"),
                          ("Commands\nExecuted", f"{self.bot.commands_executed}"),
@@ -57,6 +57,7 @@ class Info(commands.Cog):
                          ("Python Version", platform.python_version()),
                          ("GitHub", "Want to see all of the code for the bot, check out the GitHub [here]("
                                     "https://github.com/TheCrimsonLord/Codex)"),
+                         ("Want me in your own server?", "Invite me [here](http://bit.ly/CodexBot)"),
                          ("Support Server", "Need help, join [here](https://discord.gg/g8G7QvPVas)")],
                         thumbnail=self.bot.user.avatar_url)
 
@@ -74,7 +75,7 @@ class Info(commands.Cog):
                          ("Joined Server", joined_at),
                          ("Joined Discord", created_at),
                          (f"Hoisted Roles ({len(hoisted_roles)})",
-                          ' '.join([r.mention for r in hoisted_roles[:-6:-1]]) if hoisted_roles else 'None'),
+                          " ".join([r.mention for r in hoisted_roles[:-6:-1]]) if hoisted_roles else "None"),
                          (f"Normal Roles ({len(normal_roles)})",
                           " ".join([r.mention for r in normal_roles[:-6:-1] if
                                     r.id not in [x.id for x in hoisted_roles]]) if
@@ -93,7 +94,7 @@ class Info(commands.Cog):
                          ("Text channels", len(ctx.guild.text_channels)),
                          ("Voice channels", len(ctx.guild.voice_channels)),
                          ("Categories", len(ctx.guild.categories)),
-                         ("Roles", len(ctx.guild.roles))],
+                         ("Roles", len(ctx.guild.roles) - 1)],
                         thumbnail=ctx.guild.icon_url)
 
 

@@ -126,7 +126,7 @@ class CodexContext(commands.Context):
             title=title,
             description=description,
             color=clr or discord.Color.random(),
-            title_url=title_url,
+            url=title_url,
             allowed_mentions=mentions or discord.AllowedMentions.none()
         )
         if author:
