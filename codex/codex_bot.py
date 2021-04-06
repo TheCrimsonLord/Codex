@@ -20,7 +20,22 @@ class CodexBot(commands.Bot):
         self.messages = 0
         self.commands_executed = 0
         self.start_time = datetime.now()
+        self.commands_ran = {}
+
+        async def command_ran(ctx: codex.CodexContext):
+            self.commands_executed += 1
+            if ctx.command.qualified_name not in self.commands_ran:
+                self.commands_ran[ctx.command.qualified_name] = 1
+            else:
+                self.commands_ran[ctx.command.qualified_name] += 1
+
+        self.add_listener(
+            command_ran,
+            "on_command_completion"
+        )
 
     async def on_message(self, message: discord.Message):
         ctx: codex.CodexContext = await self.get_context(message, cls=codex.CodexContext)
         await self.invoke(ctx)
+        if not ctx.command and not message.author.bot and message.guild:
+            self.messages += 1

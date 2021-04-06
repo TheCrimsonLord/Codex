@@ -14,8 +14,6 @@ class Info(commands.Cog):
 
     def __init__(self, bot: codex.CodexBot):
         self.bot = bot
-        self.mem: int = 0
-        self.max_mem: int = 0
         self.ping: int = 0
         self.ping_run: List[int] = []
         self.avg_ping: int = 0
@@ -41,7 +39,7 @@ class Info(commands.Cog):
                 text_channels += 1
             if isinstance(channel, discord.VoiceChannel):
                 voice_channels += 1
-        await ctx.embed(title="Bot Information", author=f"Codex 1.0.0",
+        await ctx.embed(title="Bot Information", author=f"Codex v1.0.1",
                         fields=
                         [("Ping", f"{round(self.bot.latency * 1000)} ms\n"
                                   f"{self.avg_ping} ms (1h average)"),
