@@ -39,7 +39,7 @@ class Info(commands.Cog):
                 text_channels += 1
             if isinstance(channel, discord.VoiceChannel):
                 voice_channels += 1
-        await ctx.embed(title="Bot Information", author=f"Codex v1.0.1",
+        await ctx.embed(title="Bot Information", author=f"Codex {self.bot.version}",
                         fields=
                         [("Ping", f"{round(self.bot.latency * 1000)} ms\n"
                                   f"{self.avg_ping} ms (1h average)"),

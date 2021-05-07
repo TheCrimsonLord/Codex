@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 
 import discord
@@ -21,6 +22,8 @@ class CodexBot(commands.Bot):
         self.commands_executed = 0
         self.start_time = datetime.now()
         self.commands_ran = {}
+        version = subprocess.check_output(["git", "describe", "--tags"]).strip().decode("utf-8").split("-")
+        self.version = "+".join(version[:-1]) if len(version) > 2 else version[0]
 
         async def command_ran(ctx: codex.CodexContext):
             self.commands_executed += 1
