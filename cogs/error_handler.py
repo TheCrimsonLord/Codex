@@ -62,7 +62,7 @@ class ErrorHandler(commands.Cog):
 
         elif isinstance(error, commands.CommandInvokeError):
             await ctx.embed(title="If you are getting this error, contact TheCrimsonLord#3794 for help.\nThis is due "
-                                  "to the fact he is a terrible coder")
+                                  "to the fact they are a terrible coder")
             log.error(
                 f"{ctx.command.qualified_name} failed to execute. ",
                 exc_info=error.original)
